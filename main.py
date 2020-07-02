@@ -1,5 +1,7 @@
+from enum import Enum
+
 from house import new_random_house
-from simulation import Community
+from simulation import Community, Ruleset
 from setup import MONTHS_A_PERSON_LIVES
 from shareholder import apply_custom_policy, Shareholder
 
@@ -8,18 +10,22 @@ def run_one_month(state):
     state.do_life_and_death_step()
     state = apply_custom_policy(state)
     state.do_income_and_taxes_step()
-    state.do_acquire_shares_step()
+    state.so_shares_step()
     state.next_timestep()
     return state
 
 
+
+
+
 def run(number_of_months=MONTHS_A_PERSON_LIVES * 3,
         initial_number_of_people=5,
-        initial_number_of_houses=6,
-        allow_inheritance=False):
-
+        initial_number_of_houses=20,
+        allow_inheritance=False,
+        ruleset=Ruleset.by_shares,
+        ):
     founder = Shareholder(age=0, money=0, name='Founder')
-    state = Community(founder=founder, allow_inheritance=allow_inheritance)
+    state = Community(founder=founder, allow_inheritance=allow_inheritance, ruleset=ruleset)
 
     for i in range(initial_number_of_people):
         # newborns initially have no house (homeless status)
@@ -33,7 +39,7 @@ def run(number_of_months=MONTHS_A_PERSON_LIVES * 3,
         total_price += price
 
     print(
-        f'Simulation starts with {initial_number_of_houses} initial houses and {initial_number_of_people} people, total price:${total_price}')
+        f'Simulation starts with {initial_number_of_houses} initial houses and {initial_number_of_people} people, total price:${total_price}, ruleset:{ruleset}')
 
     for i in range(number_of_months):
         state = run_one_month(state)

@@ -3,7 +3,7 @@ import plotly.express as px
 
 from main import run
 
-stats = run(allow_inheritance=False)
+stats = run(allow_inheritance=True)
 df = DataFrame.from_dict(stats.example_house_stats, "index")
 
 fig = px.line(df, x="year", y="shares", color="name", title="Ownership of shares for House number 0")

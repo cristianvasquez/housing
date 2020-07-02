@@ -23,14 +23,22 @@ class Shareholder():
         self.shares_inherited = 0  # Only for stats
         self.money_inherited = 0  # Only for stats
         self.period_share_income = 0  # Only for stats
+        self.period_work_income = 0  # Only for stats
         self.changed_house = 0  # Only for stats
 
+    @property
+    def is_retired(self):
+        return self.age > 60
+
     def work(self):
-        # People perceives money only if they are less than 60 y/o
-        if self.age < 60:
-            income = random.randint(20, 25)
+
+        if not self.is_retired:
+            # Person works
+            income = random.randint(8, 12)
         else:
-            income = 0
+            # Person is retired
+            income = random.randint(3, 6)
+        self.period_work_income = income
         self.money += income
 
     def produces_a_child_this_month(self):
@@ -68,16 +76,19 @@ def apply_custom_policy(state, change_house_prob=CHANGE_HOUSE_PROBABILITY):
             if prospect_house is not None:
                 # print(f'homeless {person_id} rents house {prospect_house} for ${price}')
                 state.occupy_house(person_id, prospect_house)
-            # else:
-            #     print(f'homeless {person_id} did not find a house')
+            else:
+                print(
+                    f'homeless {person_id} did not find a house, available_money:{available_money} available_houses:{state.available_houses}')
 
-    #  if there are more people than houses, brother state tries to build a house
-    if len(state.people) + 1 > len(state.houses):
+    #  if there are few houses available, brother state tries to build new ones
+    if len(state.available_houses) < 2:
         house, price = new_random_house(f'new house {state.house_max_id}')
         if state.founder.money > price:
             state.founder.money -= price
             state.founder.spent_building_houses += price
             state.add_new_house(house)
-            # print(f'{state.founder.name} built a house')
+            # print(f'{state.founder.name} money:${state.founder.money:.2f} built a house, price ${price:.2f}')
+        else:
+            print(f'{state.founder.name} money:${state.founder.money:.2f} cannot build a house, price ${price:.2f}')
 
     return state
