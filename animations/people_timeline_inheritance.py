@@ -3,7 +3,7 @@ from pandas import DataFrame
 
 from main import run
 
-stats = run(inheritance=True)
+stats = run(allow_inheritance=True)
 df = DataFrame.from_dict(stats.people_stats, "index")
 
 fig = px.scatter(df,
@@ -12,7 +12,6 @@ fig = px.scatter(df,
                  animation_frame="year",
                  animation_group="id",
                  size="share_income",
-                 # color="continent",
                  color="shares",
                  hover_name="id",
                  facet_col="inherited",

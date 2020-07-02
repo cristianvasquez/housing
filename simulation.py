@@ -1,7 +1,6 @@
 import random as np
 
-from house import new_house
-from shareholder import new_person
+from shareholder import new_random_person
 from setup import MAX_PEOPLE, MONTHS_PER_YEAR
 
 
@@ -30,7 +29,7 @@ class Stats:
 
 
 class Community:
-    def __init__(self, house_tenant=None, people=None, houses=None, brother_state=None, inheritance=False):
+    def __init__(self, house_tenant=None, people=None, houses=None, founder=None, allow_inheritance=False):
         if houses is None:
             houses = {}
         if people is None:
@@ -41,8 +40,8 @@ class Community:
         self.house_tenants = house_tenant
         self.people = people
         self.houses = houses
-        self.brother_state = brother_state
-        self.inheritance = inheritance
+        self.founder = founder
+        self.inheritance = allow_inheritance
         self.people_max_id = len(people)
         self.house_max_id = len(houses)
 
@@ -50,9 +49,9 @@ class Community:
 
         self.stats = Stats()
 
-    def increase_tick(self):
+    def next_timestep(self):
         '''
-        Game 'time-ticks' correspond to one month.
+        The game 'time-ticks' correspond to one month.
         '''
         if self.current_tick % MONTHS_PER_YEAR == 0:
             year = int(self.current_tick / MONTHS_PER_YEAR)
@@ -66,8 +65,8 @@ class Community:
         for k, person in self.people.items():
             total_shares = 0
             for _, house in self.houses.items():
-                if k in house.shares:
-                    total_shares += house.shares[k]
+                if k in house.share_owners:
+                    total_shares += house.share_owners[k]
             self.stats.add_people_stats_record({
                 'year': year,
                 'id': person.name,
@@ -102,8 +101,8 @@ class Community:
             'houses': len(self.houses),
             'alive': len(self.people),
             'dead': len(self.dead_people),
-            'state_money': self.brother_state.money,
-            'spent_building_houses': self.brother_state.spent_building_houses,
+            'brother_state_money': self.founder.money,
+            'spent_building_houses': self.founder.spent_building_houses,
         })
 
     def add_example_house_stats(self, year):
@@ -146,28 +145,28 @@ class Community:
                 del self.house_tenants[k]
                 return
 
-    def step_life_and_death(self):
+    def do_life_and_death_step(self):
 
-        self.brother_state.age += 1 / MONTHS_PER_YEAR
+        self.founder.age += 1 / MONTHS_PER_YEAR
 
         for k, person in self.people.copy().items():
 
             if len(self.people) < MAX_PEOPLE:
-                if person.produces_child():
+                if person.produces_a_child_this_month():
                     self.add_new_born(parent=k)
 
-            if person.dies():
+            if person.dies_this_month():
                 self._person_dies(k)
 
             else:
                 # Everyone ages
                 person.age += 1 / MONTHS_PER_YEAR
 
-    def step_income_and_taxes(self):
+    def do_income_and_taxes_step(self):
         for k, shareholder in self.people.items():
             shareholder.work()
 
-    def step_acquire_shares(self):
+    def do_acquire_shares_step(self):
         # If persons are tenants, they need to acquire a share to continue living in the house for one month.
         # otherwise they go homeless
         for house_id, person_id in self.house_tenants.items():
@@ -185,20 +184,20 @@ class Community:
 
                 # All previous shareholders receive their share
                 total_shares = self.houses[house_id].total_shares
-                for owner_id, shares in self.houses[house_id].shares.items():
+                for owner_id, shares in self.houses[house_id].share_owners.items():
                     share_benefit = (shares / total_shares) * money_to_pay
                     # print(f'{self.people[owner_id].name} receives {share_benefit} for {shares}/{total_shares}')
                     self.people[owner_id].money += share_benefit
                     self.people[owner_id].period_share_income += share_benefit  # Only for stats
 
                 # Brother state receives his share
-                self.brother_state.money += (self.houses[house_id].founder_shares / total_shares) * money_to_pay
+                self.founder.money += (self.houses[house_id].founder_shares / total_shares) * money_to_pay
                 # print(
                 #     f'{self.brother_state.name} receives {(self.houses[house_id].founder_shares / total_shares) * money_to_pay}')
 
                 self.houses[house_id].assign_share(person_id)
 
-    def _get_random_child(self, person_id):
+    def _get_random_sibling(self, person_id):
         for k, person in self.people.items():
             if person.parent == person_id:
                 return k
@@ -208,12 +207,12 @@ class Community:
 
         # Remove the shares
         for k, house in self.houses.items():
-            if deceased_id in house.shares:
-                child_id = self._get_random_child(deceased_id)
+            if deceased_id in house.share_owners:
+                child_id = self._get_random_sibling(deceased_id)
                 if self.inheritance and child_id is not None:
 
                     # Child inherits the shares
-                    share_amount = house.inherit_shares(deceased_id, child_id)
+                    share_amount = house.inherit_to_sibling(deceased_id, child_id)
                     self.people[child_id].shares_inherited += share_amount  # Only for stats
 
                     # Child also inherits money
@@ -224,43 +223,58 @@ class Community:
 
                 else:
                     # Brother state inherits the shares
-                    amount = house.founder_inherit_shares(deceased_id)
-                    self.brother_state.shares_inherited += amount  # Only for stats
+                    amount = house.inherit_to_founder(deceased_id)
+                    self.founder.shares_inherited += amount  # Only for stats
 
         self._return_house(deceased_id)
         del self.people[deceased_id]
         self.dead_people.add(deceased_id)
 
     def add_new_born(self, parent=None):
-        self.people[self.people_max_id] = new_person(name=f'person {self.people_max_id}', parent=parent)
+        self.people[self.people_max_id] = new_random_person(name=f'person {self.people_max_id}', parent=parent)
         self.people_max_id += 1
 
-    def add_new_house(self):
-        self.houses[self.house_max_id] = new_house(name=f'house {self.house_max_id}')
+    def add_new_house(self, new_house):
+        self.houses[self.house_max_id] = new_house
         self.house_max_id += 1
 
     def __repr__(self):
 
         houses = ''
         for i, house in self.houses.items():
-            houses += f'\n{house.name}, share_price:${house.share_price}, shares:{house.shares}, founder_shares:{house.founder_shares}, total_shares={house.total_shares}, inflation={house.inflation}'
+
+            tenant = ''
+            if i in self.house_tenants:
+                tenant_name = self.people[self.house_tenants[i]].name
+                tenant = f', current tenant:[{tenant_name}]'
+
+            houses += f'\n[{house.name}]: share price:${house.share_price:.2f}, share owners:{house.share_owners}, founder has {house.founder_shares}/{house.total_shares} shares, inflation:{house.inflation:.2f}{tenant}'
         people = ''
         for i, person in self.people.items():
-            people += f'\n{person.name} (parent:{person.parent}), money:${person.money}, age:{person.age}, shares_inherited:{person.shares_inherited}'
+
+            house = ', is homeless'
+            for _house_id, _person_id in self.house_tenants.items():
+                if _person_id == i:
+                    house = f', lives in [{self.houses[_house_id].name}]'
+            inheritance_info = f' shares_inherited:{person.shares_inherited},' if self.inheritance else ''
+
+            people += f'\n[{person.name} (parent:{person.parent})]: money:${person.money:.2f}, age:{person.age:.2f},{inheritance_info} changed {person.changed_house} times{house}'
 
         return \
             f'''
 -----------------------------
+Year {self.current_tick / MONTHS_PER_YEAR:.0f}, month {self.current_tick % MONTHS_PER_YEAR + 1}
+-----------------------------
+{self.founder.name}, money:${self.founder.money:.2f} age:{self.founder.age:.0f}
 Tenants: {self.house_tenants}
 Homeless people: {self.homeless_people}
-Brother state: money:${self.brother_state.money} age:{self.brother_state.age}
 -----------------------------
-Houses: 
+Current houses: 
 {houses}
 -----------------------------
-People: 
+Current people: 
 {people}
 -----------------------------
-Dead People:
+Deceased:
 {self.dead_people}
         '''

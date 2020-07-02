@@ -21,5 +21,8 @@ def test_probability_of_death():
     for j in range(100):
         for i in range(1000):
             if np.random() < probability_of_death_per_month(i):
-                print(f'Died at age: {i}')
+                print(f'Random person died at age: {i}')
                 break
+
+if __name__ == '__main__':
+    test_probability_of_death()
