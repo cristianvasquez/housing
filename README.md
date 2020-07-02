@@ -1,5 +1,7 @@
 # Housing by shares
 
+Cristian Vasquez
+
 We need a house to live in. To do so, the most common options are:
 
 1. To rent a house
@@ -7,7 +9,7 @@ We need a house to live in. To do so, the most common options are:
 
 This simulation explores "Housing by shares," a hybrid mechanism that lives somewhere in between option 1 and 2
 
-# The problem
+## The problem
 
 Everyone wants to own a house, but not everyone can buy a home.
 
