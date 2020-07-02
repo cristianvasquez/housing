@@ -1,22 +1,15 @@
-from enum import Enum
+from simulator.house import new_random_house
+from simulator.simulation import Community, Ruleset
+from simulator.setup import MONTHS_A_PERSON_LIVES
+from simulator.shareholder import apply_custom_policy, Shareholder
 
-from house import new_random_house
-from simulation import Community, Ruleset
-from setup import MONTHS_A_PERSON_LIVES
-from shareholder import apply_custom_policy, Shareholder
-
-
-def run_one_month(state):
+def run_for_one_month(state):
     state.do_life_and_death_step()
     state = apply_custom_policy(state)
     state.do_income_and_taxes_step()
     state.so_shares_step()
     state.next_timestep()
     return state
-
-
-
-
 
 def run(number_of_months=MONTHS_A_PERSON_LIVES * 3,
         initial_number_of_people=5,
@@ -42,7 +35,7 @@ def run(number_of_months=MONTHS_A_PERSON_LIVES * 3,
         f'Simulation starts with {initial_number_of_houses} initial houses and {initial_number_of_people} people, total price:${total_price}, ruleset:{ruleset}')
 
     for i in range(number_of_months):
-        state = run_one_month(state)
+        state = run_for_one_month(state)
 
     print(state)
     return state.stats

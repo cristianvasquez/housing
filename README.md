@@ -34,25 +34,7 @@ Houses enter the community, bought in traditional markets by the founder.  Each 
 
 If a person wants to live for one month in one of those houses, she has to pay a fee corresponding to the price of a share. The paid amount goes proportionally to all share-holders, then one share is created to be owned by the person, and one share of the founder is destroyed.
 
-## Simulation
-
-I don't have a finished idea of how this would work, so I programmed a simple simulation that uses the following initial values:
-
-The number of initial shares created corresponds to the number of months an average person can live. 
-
-The price of each share is simply the house's initial price divided by the number of initial shares
-
-Since this is only a preliminary exploration, I try to keep it simple. 
-The simulation does not apply taxes.
-Shares are not bought or sold on the open market
-
-When a person dies, his shares are transferred back to the founder or to a random sibling if the inheritance option is enabled.
-
-To run the application:
-
-```
-python application.py
-```
+When a person dies, the shares go back to the founder (government), that can build more houses. To ensure the share-influx, shares are not bought or sold in the open market.
 
 ## Other remedies  (from Wikipedia)
 

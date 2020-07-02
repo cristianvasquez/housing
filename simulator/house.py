@@ -1,4 +1,4 @@
-from setup import MONTHS_A_PERSON_LIVES, MONTHS_PER_YEAR
+from simulator.setup import MONTHS_A_PERSON_LIVES, MONTHS_PER_YEAR
 
 import numpy as np
 

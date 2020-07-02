@@ -1,7 +1,7 @@
 import random
 
-from house import new_random_house
-from setup import probability_of_birth_per_month, probability_of_death_per_month, MONTHS_A_PERSON_LIVES
+from simulator.house import new_random_house
+from simulator.setup import probability_of_birth_per_month, probability_of_death_per_month, MONTHS_A_PERSON_LIVES
 
 CHANGE_HOUSE_PROBABILITY = 10 / MONTHS_A_PERSON_LIVES
 

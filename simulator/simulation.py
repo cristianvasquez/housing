@@ -1,9 +1,9 @@
 import random
 from enum import Enum
 
-from shareholder import new_random_person
-from setup import MAX_PEOPLE, MONTHS_PER_YEAR
-from stats import Stats
+from simulator.shareholder import new_random_person
+from simulator.setup import MAX_PEOPLE, MONTHS_PER_YEAR
+from simulator.stats import Stats
 
 
 class Ruleset(Enum):
@@ -45,8 +45,6 @@ class Community:
             self.record_people_stats(year)
             self.record_general_stats(year)
             self.record_example_house_stats(year)
-
-
 
         self.current_tick += 1
 
@@ -108,7 +106,7 @@ class Community:
 
     def do_life_and_death_step(self):
         '''
-        Applies rules of life in the simulation
+        Applies rules of life in the simulator
         :return:
         '''
 
@@ -218,7 +216,7 @@ class Community:
 
     def record_people_stats(self, year):
         '''
-        Records statistics about all people in the simulation
+        Records statistics about all people in the simulator
         :param year:
         :return:
         '''
@@ -253,7 +251,7 @@ class Community:
             person.period_share_income = 0  # Reset the share income for this period
             person.period_work_income = 0  # Reset the work income for this period
 
-        # I added this dummy person to make the animation facet's work.
+        # I had to add this dummy person to make the animation facet's work.
         if self.inheritance:
             self.stats.add_people_stats_record({
                 'year': year,
@@ -268,6 +266,19 @@ class Community:
                 'inherited': True,
                 'current_house': None
             })
+            self.stats.add_people_stats_record({
+                'year': year,
+                'id': 'dummy',
+                'money': 0,
+                'shares': 0,
+                'age': 0,
+                'parent': None,
+                'share_income': 0,
+                'work_income': 0,
+                'income': 0,
+                'inherited': False,
+                'current_house': None
+            })
 
     def record_general_stats(self, year):
         '''
@@ -275,14 +286,41 @@ class Community:
         :param year:
         :return:
         '''
+
         self.stats.add_general_stats_record({
             'year': year,
-            'homeless_people': len(self.homeless_people),
-            'houses': len(self.houses),
-            'alive': len(self.people),
-            'dead': len(self.dead_people),
-            'brother_state_money': self.founder.money,
-            'spent_building_houses': self.founder.spent_building_houses,
+            'amount': len(self.people.keys()),
+
+            'type': 'People alive',
+            'scale': 'human'
+        })
+
+        self.stats.add_general_stats_record({
+            'year': year,
+            'amount': len(self.homeless_people),
+            'type': 'Homeless people',
+            'scale': 'human'
+        })
+
+        self.stats.add_general_stats_record({
+            'year': year,
+            'amount': len(self.houses),
+            'type': 'houses',
+            'scale': 'human'
+        })
+
+        self.stats.add_general_stats_record({
+            'year': year,
+            'amount': self.founder.money,
+            'type': 'Founder money',
+            'scale': 'money'
+        })
+
+        self.stats.add_general_stats_record({
+            'year': year,
+            'amount': self.founder.spent_building_houses,
+            'type': 'Spent building houses',
+            'scale': 'money'
         })
 
     def record_example_house_stats(self, year):
