@@ -37,6 +37,26 @@ If a person wants to live for one month in one of those houses, she has to pay a
 
 When a person dies, the shares go back to the founder (government), that can build more houses. To ensure the share-influx, shares are not bought or sold in the open market.
 
+## Simulation
+
+I don't have a finished idea of how this would work, so I programmed a simple simulation that spans for 300 years, in a micro community of people.
+People can have childs and die, and wants to give the *Housing by shares* a try.
+
+Since this is only a preliminary exploration, I try to keep it simple, for example,there are no taxes.
+
+Initial values:
+
+- The number of initial shares created corresponds to the number of months an average person can live. 
+- The price of each share is simply the house's initial price divided by the number of initial shares.
+
+I'm exploring two options, with inheritance and without, to see how it goes. If inheritance is enabled, a random sibling inherits the shares, otherwise the founder.
+
+to run the simulation:
+
+```
+python application.py
+```
+
 
 Jun, 2020, Cristian Vasquez
 
