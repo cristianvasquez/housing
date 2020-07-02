@@ -1,6 +1,5 @@
 # Housing by shares
 
-
 We need a house to live in. To do so, the most common options are:
 
 1. To rent a house
@@ -56,7 +55,6 @@ to run the simulation:
 ```
 python application.py
 ```
-
 
 Jun, 2020, Cristian Vasquez
 

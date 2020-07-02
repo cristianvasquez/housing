@@ -1,14 +1,15 @@
 import random
-from enum import Enum
+from enum import Enum, unique
 
 from simulator.shareholder import new_random_person
 from simulator.setup import MAX_PEOPLE, MONTHS_PER_YEAR
 from simulator.stats import Stats
 
 
+@unique
 class Ruleset(Enum):
-    by_shares = 0
-    normal_rent = 1
+    by_shares = 1
+    normal_rent = 2
 
 
 class Community:

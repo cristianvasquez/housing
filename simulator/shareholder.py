@@ -50,7 +50,7 @@ class Shareholder():
         return random.random() < d_prob
 
 
-def apply_custom_policy(state, change_house_prob=CHANGE_HOUSE_PROBABILITY):
+def apply_custom_policy(state, change_house_prob=CHANGE_HOUSE_PROBABILITY, verbose=True):
     '''
     This corresponds to choices that people and founder can take
     '''
@@ -77,8 +77,9 @@ def apply_custom_policy(state, change_house_prob=CHANGE_HOUSE_PROBABILITY):
                 # print(f'homeless {person_id} rents house {prospect_house} for ${price}')
                 state.occupy_house(person_id, prospect_house)
             else:
-                print(
-                    f'homeless {person_id} did not find a house, available_money:{available_money} available_houses:{state.available_houses}')
+                if verbose:
+                    print(
+                        f'homeless {person_id} did not find a house, available_money:{available_money} available_houses:{state.available_houses}')
 
     #  if there are few houses available, brother state tries to build new ones
     if len(state.available_houses) < 2:
@@ -89,6 +90,7 @@ def apply_custom_policy(state, change_house_prob=CHANGE_HOUSE_PROBABILITY):
             state.add_new_house(house)
             # print(f'{state.founder.name} money:${state.founder.money:.2f} built a house, price ${price:.2f}')
         else:
-            print(f'{state.founder.name} money:${state.founder.money:.2f} cannot build a house, price ${price:.2f}')
+            if verbose:
+                print(f'{state.founder.name} money:${state.founder.money:.2f} cannot build a house, price ${price:.2f}')
 
     return state
