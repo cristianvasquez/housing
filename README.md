@@ -28,7 +28,7 @@ The idea is that a person collects several shares during her lifetime, that will
 
 ## Setup
 
-A community needs a founder, for example, the government. 
+A community needs a founder, for example, the government or a big cooperative
 
 Houses enter the community, bought in traditional markets by the founder.  Each time a house enters, it's initial value is divided into a fixed amount of shares that are transferred to the founder, meaning that in the beginning, he is the only shareholder.
 

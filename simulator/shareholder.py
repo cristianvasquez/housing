@@ -1,6 +1,7 @@
 import random
 
 from simulator.setup import probability_of_birth_per_month, probability_of_death_per_month
+import numpy as np
 
 
 def new_random_person(name='', parent=None):
@@ -27,14 +28,12 @@ class Shareholder():
     def is_retired(self):
         return self.age > 60
 
-    def work(self):
+    def work(self, setup):
+        income = np.random.normal(setup['average_salary'], setup['sigma_salary'])
+        # If person is retired, the salary is diminished
+        if self.is_retired:
+            income = income * setup['retirement_factor']
 
-        if not self.is_retired:
-            # Person works
-            income = random.randint(8, 12)
-        else:
-            # Person is retired
-            income = random.randint(3, 6)
         self.period_work_income = income
         self.money += income
 

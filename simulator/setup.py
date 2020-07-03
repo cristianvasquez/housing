@@ -13,19 +13,30 @@ MONTHS_A_PERSON_LIVES = YEARS_A_PERSON_LIVES * 12  # Max number of months a pers
 MONTHS_PER_YEAR = 12
 
 DEFAULT_SETUP = {
+    # simulation parameters
+    'number_of_months_to_run': MONTHS_A_PERSON_LIVES * 3,
     'max_people': 30,
     'min_people': 2,
-
-    'probability_of_changing_house': 10 / MONTHS_A_PERSON_LIVES,
-    'minimum_free_houses_policy': 2,
-    'number_of_months_to_run': MONTHS_A_PERSON_LIVES * 3,
     'initial_number_of_people': 5,
     'initial_number_of_houses': 20,
     'allow_inheritance': False,
     'ruleset': Ruleset.by_shares,
+
+    # agents policy
+    'probability_of_changing_house': 10 / MONTHS_A_PERSON_LIVES,
+    'minimum_free_houses_policy': 2,
+
+    # House costs
     'average_house_cost': MONTHS_PER_YEAR * 40 * 15,  # 7200
     'sigma_house_cost':200,
-    'number_of_shares_per_house': MONTHS_A_PERSON_LIVES
+    'number_of_shares_per_house': MONTHS_A_PERSON_LIVES / 2,
+    'house_to_rent_ratio':0.01, # The rent divided by the house price
+    'shares_per_month_earnings':1, # how many shares a person earns by renting for 1 month
+
+    # People earnings
+    'average_salary': 100,
+    'sigma_salary': 20,
+    'retirement_factor': 0.2
 }
 
 

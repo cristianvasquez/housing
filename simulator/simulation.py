@@ -61,8 +61,8 @@ class Community:
         houses = list(range(len(self.houses)))
         random.shuffle(houses)
         for i in houses:
-            if self.houses[i].share_price < budget and i not in self.house_tenants:
-                return i, self.houses[i].share_price
+            if self.houses[i].rent_price < budget and i not in self.house_tenants:
+                return i, self.houses[i].rent_price
         return None, None
 
     @property
@@ -127,14 +127,14 @@ class Community:
         :return:
         '''
         for k, shareholder in self.people.items():
-            shareholder.work()
+            shareholder.work(self.setup)
 
     def so_shares_step(self):
         # If persons are tenants, they need to acquire a share to continue living in the house for one month.
         # otherwise they go homeless
         for house_id, person_id in self.house_tenants.copy().items():
 
-            monthly_payment = self.houses[house_id].share_price
+            monthly_payment = self.houses[house_id].rent_price
 
             if self.people[person_id].money < monthly_payment:
                 # print(self)
@@ -228,7 +228,7 @@ class Community:
             for house_id, person_id in self.house_tenants.items():
                 if person_id == k:
                     current_house = self.houses[house_id]
-                    monthly_payment = current_house.share_price
+                    monthly_payment = current_house.rent_price
 
             self.stats.add_people_stats_record({
                 'year': year,
@@ -239,10 +239,10 @@ class Community:
                 'parent': 'None' if person.parent is None else person.parent,
                 'inherited': person.shares_inherited > 0,
                 'current_house': current_house.name if current_house is not None else None,
-                'monthly_payment': monthly_payment,
                 'share_income': person.period_share_income,
                 'work_income': person.period_work_income,
-                'income': person.period_share_income + person.period_work_income - monthly_payment
+                'monthly_payment': -monthly_payment,
+                'net_income': person.period_share_income + person.period_work_income - monthly_payment
             })
             person.period_share_income = 0  # Reset the share income for this period
             person.period_work_income = 0  # Reset the work income for this period
@@ -258,7 +258,7 @@ class Community:
                 'parent': None,
                 'share_income': 0,
                 'work_income': 0,
-                'income': 0,
+                'net_income': 0,
                 'inherited': True,
                 'current_house': None
             })
@@ -271,7 +271,7 @@ class Community:
                 'parent': None,
                 'share_income': 0,
                 'work_income': 0,
-                'income': 0,
+                'net_income': 0,
                 'inherited': False,
                 'current_house': None
             })
@@ -350,7 +350,7 @@ class Community:
                 tenant_name = self.people[self.house_tenants[i]].name
                 tenant = f', current tenant:[{tenant_name}]'
 
-            houses += f'\n[{house.name}]: share price:${house.share_price:.2f}, share owners:{house.share_owners}, founder has {house.founder_shares}/{house.total_shares} shares, inflation:{house.inflation:.2f}{tenant}'
+            houses += f'\n[{house.name}]: share price:${house.rent_price:.2f}, share owners:{house.share_owners}, founder has {house.founder_shares}/{house.total_shares} shares, inflation:{house.inflation:.2f}{tenant}'
         people = ''
         for i, person in self.people.items():
 

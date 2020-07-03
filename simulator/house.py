@@ -5,33 +5,31 @@ import numpy as np
 
 def new_random_house(setup, name=''):
     # The price of the house is taken from a normal distribution, sigma as standard deviation
-    house_price = np.random.normal(setup['average_house_cost'], setup['sigma_house_cost'])
+    house_cost = np.random.normal(setup['average_house_cost'], setup['sigma_house_cost'])
     number_of_shares = setup['number_of_shares_per_house']
-    share_price = house_price / number_of_shares
 
-    return House(number_of_shares=number_of_shares, share_price=share_price, name=name), house_price
+    # share_price = house_price / number_of_shares
+    house_to_rent_ratio = setup['house_to_rent_ratio']
+    rent_price = house_cost * house_to_rent_ratio
+    shares_per_month = setup['shares_per_month_earnings']
+
+    return House(number_of_shares=number_of_shares, rent_price=rent_price, shares_per_month=shares_per_month,
+                 name=name), house_cost
 
 
 class House:
-    def __init__(self, number_of_shares=0, share_price=10, share_owners=None, name=''):
+    def __init__(self, number_of_shares=0, rent_price=10, shares_per_month=1, name=''):
         '''
         A house has a price that we initially divided into a fixed amount of shares.
         The number of shares corresponds to the number of months an average person can live,
         the idea is that the ownership of the owner can decay in one generation
-
-        :param number_of_shares:
-        :param share_price:
-        :param share_owners:
-        :param name:
         '''
-        if share_owners is None:
-            share_owners = {}
+        self.share_owners = {}
         self.founder_shares = number_of_shares
-        self.share_owners = share_owners
-        self.share_price = share_price
+        self.rent_price = rent_price
         self.name = name
-
         self.inflation = 0
+        self.shares_per_month = shares_per_month
 
     @property
     def total_shares(self):
@@ -45,20 +43,20 @@ class House:
 
         # Ownership of the founder decays by one share each month
         if self.founder_shares > 0:
-            self.founder_shares -= 1
+            self.founder_shares -= self.shares_per_month
         else:
             '''
             When the founder shares decay to 0
             some sort inflationary effect begins, 
             the number of shares become more than the initial amount
             '''
-            self.inflation += 1  # Just for stats purposes
+            self.inflation += self.shares_per_month  # Just for stats purposes
 
         # Increment the shares of a person_id by one
         if person_id in self.share_owners:
-            self.share_owners[person_id] += 1
+            self.share_owners[person_id] += self.shares_per_month
         else:
-            self.share_owners[person_id] = 1
+            self.share_owners[person_id] = self.shares_per_month
 
     def inherit_to_sibling(self, deceased_id, heir_id):
         '''
