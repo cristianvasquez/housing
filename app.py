@@ -6,6 +6,7 @@ import dash_html_components as html
 from figures.general_timeline import get_general_figures
 from figures.timelines import get_house_timeline, get_people_timeline
 from simulator.main import run
+from simulator.setup import MONTHS_A_PERSON_LIVES, DEFAULT_SETUP
 from simulator.simulation import Ruleset
 from dash.dependencies import Input, Output, State
 
@@ -15,7 +16,7 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 allow_inheritance = False
 ruleset = Ruleset.by_shares
 
-stats = run(allow_inheritance=allow_inheritance, ruleset=ruleset, verbose=False)
+stats = run(verbose=False)
 human, money = get_general_figures(stats)
 house_timeline = get_house_timeline(stats)
 people_timeline = get_people_timeline(stats, allow_inheritance, ruleset)
@@ -38,18 +39,41 @@ def markdown(text):
     [Input('submit-button-state', 'n_clicks')],
     [
         State(component_id='inheritance', component_property='value'),
-        State(component_id='ruleset', component_property='value')
+        State(component_id='ruleset', component_property='value'),
+        State(component_id='max_people', component_property='value'),
+        State(component_id='initial_number_of_people', component_property='value'),
+        State(component_id='initial_number_of_houses', component_property='value'),
+        State(component_id='minimum_free_houses_policy', component_property='value'),
+        State(component_id='number_of_months_to_run', component_property='value'),
+        State(component_id='average_house_cost', component_property='value'),
+        State(component_id='sigma_house_cost', component_property='value'),
+        State(component_id='number_of_shares_per_house', component_property='value')
     ]
 )
-def update(n_clicks, inheritance, ruleset):
+def update(n_clicks, inheritance, ruleset, max_people, initial_number_of_people, initial_number_of_houses,
+           minimum_free_houses_policy, number_of_months_to_run, average_house_cost, sigma_house_cost,
+           number_of_shares_per_house):
     ruleset = Ruleset.by_shares if ruleset == '1' else Ruleset.normal_rent
     allow_inheritance = False if inheritance == '1' else True
 
-    stats = run(allow_inheritance=allow_inheritance, ruleset=ruleset, verbose=False)
+    setup = DEFAULT_SETUP.copy()
+    setup['allow_inheritance'] = allow_inheritance
+    setup['ruleset'] = ruleset
+
+    setup['max_people'] = int(max_people)
+    setup['initial_number_of_people'] = int(initial_number_of_people)
+    setup['initial_number_of_houses'] = int(initial_number_of_houses)
+    setup['minimum_free_houses_policy'] = int(minimum_free_houses_policy)
+    setup['number_of_months_to_run'] = int(number_of_months_to_run)
+    setup['average_house_cost'] = float(average_house_cost)
+    setup['sigma_house_cost'] = float(sigma_house_cost)
+    setup['number_of_shares_per_house'] = int(number_of_shares_per_house)
+
+    stats = run(setup=setup, verbose=False)
     human, money = get_general_figures(stats)
     house_timeline = get_house_timeline(stats)
     people_timeline = get_people_timeline(stats, allow_inheritance, ruleset)
-    return human, money, house_timeline, people_timeline,''
+    return human, money, house_timeline, people_timeline, ''
 
 
 app.layout = html.Div(children=[
@@ -69,8 +93,8 @@ Since this is only a preliminary exploration, I try to keep it simple, for examp
 
 Initial values:
 
-- The number of initial shares created corresponds to the number of months an average person can live. 
-- The price of each share is simply the house's initial price divided by the number of initial shares.
+- The number of shares per house defaults to the number of months an average person can live. 
+- The price of each share is: house cost/number of shares
 
 I'm exploring two options, with inheritance and without, to see how it goes. If inheritance is enabled, a random sibling inherits the shares, otherwise the founder.
 ***
@@ -79,6 +103,52 @@ Explore the parameters below.
 '''),
 
     html.Div([
+
+        html.Div([
+            html.Label('max people'),
+            dcc.Input(id='max_people', value='{}'.format(DEFAULT_SETUP['max_people']), type='text'),
+        ]),
+
+        html.Div([
+            html.Label('initial number of people'),
+            dcc.Input(id='initial_number_of_people', value='{}'.format(DEFAULT_SETUP['initial_number_of_people']),
+                      type='text'),
+        ]),
+
+        html.Div([
+            html.Label('initial number of houses'),
+            dcc.Input(id='initial_number_of_houses', value='{}'.format(DEFAULT_SETUP['initial_number_of_houses']),
+                      type='text'),
+        ]),
+
+        html.Div([
+            html.Label('minimum available houses (policy)'),
+            dcc.Input(id='minimum_free_houses_policy', value='{}'.format(DEFAULT_SETUP['minimum_free_houses_policy']),
+                      type='text'),
+        ]),
+
+        html.Div([
+            html.Label('number of months to run (simulation)'),
+            dcc.Input(id='number_of_months_to_run', value='{}'.format(DEFAULT_SETUP['number_of_months_to_run']),
+                      type='text'),
+        ]),
+
+        html.Div([
+            html.Label('average house cost'),
+            dcc.Input(id='average_house_cost', value='{}'.format(DEFAULT_SETUP['average_house_cost']), type='text'),
+        ]),
+
+        html.Div([
+            html.Label('house cost standard deviation'),
+            dcc.Input(id='sigma_house_cost', value='{}'.format(DEFAULT_SETUP['sigma_house_cost']), type='text'),
+        ]),
+
+        html.Div([
+            html.Label('number of shares per house'),
+            dcc.Input(id='number_of_shares_per_house', value='{}'.format(DEFAULT_SETUP['number_of_shares_per_house']),
+                      type='text'),
+        ]),
+
         dcc.RadioItems(
             options=[
                 {'label': 'Without inheritance', 'value': '1'},
@@ -103,7 +173,7 @@ Explore the parameters below.
             fullscreen=True,
             children=html.Div(id="loading-output-1")
         ),
-    ], style={'columnCount': 3}),
+    ], style={'columnCount': 5}),
 
     markdown('''
 ***
@@ -116,8 +186,7 @@ Explore the parameters below.
 
     markdown('''
 ***
-##  Evolution of shares
-### For example house 0
+##  Evolution of shares (House 0)
 '''),
 
     dcc.Graph(
@@ -148,4 +217,4 @@ Explore the parameters below.
 ])
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)

@@ -1,34 +1,27 @@
 import random
-from enum import Enum, unique
 
 from simulator.shareholder import new_random_person
-from simulator.setup import MAX_PEOPLE, MONTHS_PER_YEAR
+from simulator.setup import MONTHS_PER_YEAR, DEFAULT_SETUP, Ruleset
 from simulator.stats import Stats
 
 
-@unique
-class Ruleset(Enum):
-    by_shares = 1
-    normal_rent = 2
-
-
 class Community:
-    def __init__(self, house_tenant=None, people=None, houses=None, founder=None,
-                 allow_inheritance=False,
-                 ruleset=True):
+    def __init__(self, house_tenant=None, people=None, houses=None, founder=None, setup=DEFAULT_SETUP):
+
         if houses is None:
             houses = {}
         if people is None:
             people = {}
         if house_tenant is None:
             house_tenant = {}
+        self.setup = setup
         self.dead_people = set()
         self.house_tenants = house_tenant
         self.people = people
         self.houses = houses
         self.founder = founder
-        self.inheritance = allow_inheritance
-        self.ruleset = ruleset
+        self.inheritance = setup['allow_inheritance']
+        self.ruleset = setup['ruleset']
         self.people_max_id = len(people)
         self.house_max_id = len(houses)
 
@@ -115,7 +108,7 @@ class Community:
 
         for k, person in self.people.copy().items():
 
-            if len(self.people) < MAX_PEOPLE:
+            if len(self.people) < self.setup['max_people']:
                 if person.produces_a_child_this_month():
                     self.add_new_born(parent=k)
 

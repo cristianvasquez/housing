@@ -1,10 +1,30 @@
 import math
-import random as np
+from enum import Enum, unique
+
+
+@unique
+class Ruleset(Enum):
+    by_shares = 1
+    normal_rent = 2
+
 
 YEARS_A_PERSON_LIVES = 100  # Max number of years a person lives
 MONTHS_A_PERSON_LIVES = YEARS_A_PERSON_LIVES * 12  # Max number of months a person will ever live
 MONTHS_PER_YEAR = 12
-MAX_PEOPLE = 30
+
+DEFAULT_SETUP = {
+    'max_people': 30,
+    'probability_of_changing_house': 10 / MONTHS_A_PERSON_LIVES,
+    'minimum_free_houses_policy': 2,
+    'number_of_months_to_run': MONTHS_A_PERSON_LIVES * 3,
+    'initial_number_of_people': 5,
+    'initial_number_of_houses': 20,
+    'allow_inheritance': False,
+    'ruleset': Ruleset.by_shares,
+    'average_house_cost': MONTHS_PER_YEAR * 40 * 15,  # 7200
+    'sigma_house_cost':200,
+    'number_of_shares_per_house': MONTHS_A_PERSON_LIVES
+}
 
 
 def probability_of_death_per_month(age):
@@ -15,14 +35,3 @@ def probability_of_death_per_month(age):
 
 def probability_of_birth_per_month():
     return 2 / MONTHS_A_PERSON_LIVES
-
-
-def test_probability_of_death():
-    for j in range(100):
-        for i in range(1000):
-            if np.random() < probability_of_death_per_month(i):
-                print(f'Random person died at age: {i}')
-                break
-
-if __name__ == '__main__':
-    test_probability_of_death()

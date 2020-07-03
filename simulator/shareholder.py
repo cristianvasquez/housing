@@ -1,9 +1,6 @@
 import random
 
-from simulator.house import new_random_house
-from simulator.setup import probability_of_birth_per_month, probability_of_death_per_month, MONTHS_A_PERSON_LIVES
-
-CHANGE_HOUSE_PROBABILITY = 10 / MONTHS_A_PERSON_LIVES
+from simulator.setup import probability_of_birth_per_month, probability_of_death_per_month
 
 
 def new_random_person(name='', parent=None):
@@ -48,49 +45,3 @@ class Shareholder():
     def dies_this_month(self):
         d_prob = probability_of_death_per_month(self.age)
         return random.random() < d_prob
-
-
-def apply_custom_policy(state, change_house_prob=CHANGE_HOUSE_PROBABILITY, verbose=True):
-    '''
-    This corresponds to choices that people and founder can take
-    '''
-
-    # All tenants try to get another house with a probability 0.1
-    for current_house, tenant in state.house_tenants.items():
-        if (random.random() < change_house_prob):
-            # print(f'tenant {tenant} tries to find another house')
-            prospect_house, price = state.random_available_house(state.people[tenant].money)
-            if prospect_house is not None:
-                # print(f'{tenant} moves to house {prospect_house} for ${price}')
-                state.occupy_house(tenant, prospect_house)
-                state.people[tenant].changed_house += 1
-            # else:
-            #     print(f'tenant {tenant} did not find another house')
-
-    # All homeless people try to rent a house with a probability 0.9
-    for person_id in state.homeless_people.copy():
-        if (random.random() < 0.9):
-            available_money = state.people[person_id].money
-            # print(f'homeless {person_id} tries to find a house with ${available_money}')
-            prospect_house, price = state.random_available_house(available_money)
-            if prospect_house is not None:
-                # print(f'homeless {person_id} rents house {prospect_house} for ${price}')
-                state.occupy_house(person_id, prospect_house)
-            else:
-                if verbose:
-                    print(
-                        f'homeless {person_id} did not find a house, available_money:{available_money} available_houses:{state.available_houses}')
-
-    #  if there are few houses available, brother state tries to build new ones
-    if len(state.available_houses) < 2:
-        house, price = new_random_house(f'new house {state.house_max_id}')
-        if state.founder.money > price:
-            state.founder.money -= price
-            state.founder.spent_building_houses += price
-            state.add_new_house(house)
-            # print(f'{state.founder.name} money:${state.founder.money:.2f} built a house, price ${price:.2f}')
-        else:
-            if verbose:
-                print(f'{state.founder.name} money:${state.founder.money:.2f} cannot build a house, price ${price:.2f}')
-
-    return state

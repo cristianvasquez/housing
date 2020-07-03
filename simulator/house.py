@@ -2,14 +2,11 @@ from simulator.setup import MONTHS_A_PERSON_LIVES, MONTHS_PER_YEAR
 
 import numpy as np
 
-AVERAGE_HOUSE_COST = MONTHS_PER_YEAR * 40 * 15  # 7200
 
-
-def new_random_house(name=''):
-    sigma = 200
+def new_random_house(setup, name=''):
     # The price of the house is taken from a normal distribution, sigma as standard deviation
-    house_price = np.random.normal(AVERAGE_HOUSE_COST, sigma)
-    number_of_shares = MONTHS_A_PERSON_LIVES
+    house_price = np.random.normal(setup['average_house_cost'], setup['sigma_house_cost'])
+    number_of_shares = setup['number_of_shares_per_house']
     share_price = house_price / number_of_shares
 
     return House(number_of_shares=number_of_shares, share_price=share_price, name=name), house_price
