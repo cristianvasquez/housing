@@ -14,6 +14,8 @@ MONTHS_PER_YEAR = 12
 
 DEFAULT_SETUP = {
     'max_people': 30,
+    'min_people': 2,
+
     'probability_of_changing_house': 10 / MONTHS_A_PERSON_LIVES,
     'minimum_free_houses_policy': 2,
     'number_of_months_to_run': MONTHS_A_PERSON_LIVES * 3,

@@ -41,6 +41,8 @@ def markdown(text):
         State(component_id='inheritance', component_property='value'),
         State(component_id='ruleset', component_property='value'),
         State(component_id='max_people', component_property='value'),
+        State(component_id='min_people', component_property='value'),
+
         State(component_id='initial_number_of_people', component_property='value'),
         State(component_id='initial_number_of_houses', component_property='value'),
         State(component_id='minimum_free_houses_policy', component_property='value'),
@@ -50,7 +52,7 @@ def markdown(text):
         State(component_id='number_of_shares_per_house', component_property='value')
     ]
 )
-def update(n_clicks, inheritance, ruleset, max_people, initial_number_of_people, initial_number_of_houses,
+def update(n_clicks, inheritance, ruleset, max_people,min_people, initial_number_of_people, initial_number_of_houses,
            minimum_free_houses_policy, number_of_months_to_run, average_house_cost, sigma_house_cost,
            number_of_shares_per_house):
     ruleset = Ruleset.by_shares if ruleset == '1' else Ruleset.normal_rent
@@ -61,6 +63,8 @@ def update(n_clicks, inheritance, ruleset, max_people, initial_number_of_people,
     setup['ruleset'] = ruleset
 
     setup['max_people'] = int(max_people)
+    setup['min_people'] = int(min_people)
+
     setup['initial_number_of_people'] = int(initial_number_of_people)
     setup['initial_number_of_houses'] = int(initial_number_of_houses)
     setup['minimum_free_houses_policy'] = int(minimum_free_houses_policy)
@@ -107,6 +111,11 @@ Explore the parameters below.
         html.Div([
             html.Label('max people'),
             dcc.Input(id='max_people', value='{}'.format(DEFAULT_SETUP['max_people']), type='text'),
+        ]),
+
+        html.Div([
+            html.Label('min people'),
+            dcc.Input(id='min_people', value='{}'.format(DEFAULT_SETUP['min_people']), type='text'),
         ]),
 
         html.Div([
@@ -173,7 +182,7 @@ Explore the parameters below.
             fullscreen=True,
             children=html.Div(id="loading-output-1")
         ),
-    ], style={'columnCount': 5}),
+    ], style={'columnCount': 6}),
 
     markdown('''
 ***

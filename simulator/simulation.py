@@ -114,10 +114,12 @@ class Community:
 
             if person.dies_this_month():
                 self._person_dies(k)
-
             else:
-                # Everyone ages
+                # If person don't die, then ages
                 person.age += 1 / MONTHS_PER_YEAR
+
+        if len(self.people) < self.setup['min_people']:
+            self.add_new_born(parent=None)
 
     def do_income_and_taxes_step(self):
         '''
