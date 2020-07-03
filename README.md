@@ -34,7 +34,7 @@ Houses enter the community, bought in traditional markets by the founder.  Each 
 
 If a person wants to live for one month in one of those houses, she has to pay a fee corresponding to the price of a share. The paid amount goes proportionally to all share-holders, and one share is created to the person, and one share of the founder is destroyed.
 
-When a person dies, the shares go back to the founder (government), that can build more houses. To ensure the share-influx, shares are not bought or sold in the open market.
+When a person dies, the shares go back to the founder (i.e big cooperative, government), that can buy more houses if needed. To ensure the share-influx, shares are not bought or sold in the open market.
 
 ## Simulation
 
