@@ -55,17 +55,23 @@ I'm exploring two options, with inheritance and without, to see how it goes. If 
 
 ### Parameters 
 
-![parameters](images/image_01.png)
+![parameters](images/parameters.png)
+
+### Demographics
+
+![demographics](images/image_00.png)
 
 People live, have childs and die. From time to time they change houses. When there is a lack of houses, the founder buys more.
 
 ### How shares evolve
 
-![evolution of shares](images/image_02.png)
+![evolution of shares](images/image_01.png)
 
 Ownership of shares go from person to person. The founder recovers shares when a person dies.
 
-![wealth of the population](images/image_03.png)
+### How wealth evolve
+
+![wealth of the population](images/image_02.png)
 
 People has higher incomes at later ages, coming from the shares they gathered through their lifetime.
 

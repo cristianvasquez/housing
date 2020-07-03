@@ -165,8 +165,6 @@ Explore the parameters below.
                       type='text'),
         ]),
 
-
-
         html.Div([
             html.Label('average house cost'),
             dcc.Input(id='average_house_cost', value='{}'.format(DEFAULT_SETUP['average_house_cost']), type='text'),
@@ -236,7 +234,7 @@ Explore the parameters below.
             fullscreen=True,
             children=html.Div(id="loading-output-1")
         ),
-    ], style={'columnCount': 6}),
+    ], style={'columnCount': 4}),
 
     markdown('''
 ***
