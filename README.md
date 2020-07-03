@@ -50,6 +50,15 @@ Initial values:
 
 I'm exploring two options, with inheritance and without, to see how it goes. If inheritance is enabled, a random sibling inherits the shares, otherwise the founder.
 
+Some screenshots:
+
+![parameters](images/image_01.png)
+
+![evolution of shares](images/image_02.png)
+
+![wealth of the population](images/image_03.png)
+
+
 to run the simulation:
 
 ```
