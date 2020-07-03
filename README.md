@@ -50,14 +50,26 @@ Initial values:
 
 I'm exploring two options, with inheritance and without, to see how it goes. If inheritance is enabled, a random sibling inherits the shares, otherwise the founder.
 
-Some screenshots:
+
+## Screenshots
+
+### Parameters 
 
 ![parameters](images/image_01.png)
 
+People live and die, and have childs. When there is a lack of houses, the founder buys more.
+
+### How shares evolve
+
 ![evolution of shares](images/image_02.png)
+
+Ownership of shares go from person to person. The founder recovers shares when a person dies.
 
 ![wealth of the population](images/image_03.png)
 
+People has higher incomes at later ages, coming from the shares they gathered through their lifetime.
+
+## App
 
 to run the simulation:
 
@@ -66,19 +78,3 @@ python application.py
 ```
 
 Jun, 2020, Cristian Vasquez
-
-
-## Other remedies  (from Wikipedia)
-
-Proposals to remedy the adverse effects of housing inequality include:
-
-Subsidized housing, also known as affordable housing. Subsidized housing includes:
-* Co-operative housing
-* Non-profit housing
-* Direct housing
-* Public housing
-* Rent supplements
-* Scattered-site housing - A housing system where rent is based on household income
-* Fair-lending enforcement - Lenders are expected to not discriminate against borrowers because of family status, race, originality, gender, and color
-
-
