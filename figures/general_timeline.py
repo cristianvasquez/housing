@@ -1,8 +1,5 @@
 import plotly.express as px
 from pandas import DataFrame
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-
 
 def get_general_figures(stats):
     df = DataFrame.from_dict(stats.general_stats, "index")

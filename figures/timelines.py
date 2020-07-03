@@ -24,7 +24,7 @@ def get_people_timeline(stats, allow_inheritance, ruleset):
         'parent': True,
         'inherited': True,
         'current_house': True,
-        'monthly_payment': ':.2f',
+        'rent': ':.2f',
         'share_income': ':.2f',
         'work_income': ':.2f',
         'net_income': ':.2f',

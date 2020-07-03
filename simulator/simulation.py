@@ -241,7 +241,7 @@ class Community:
                 'current_house': current_house.name if current_house is not None else None,
                 'share_income': person.period_share_income,
                 'work_income': person.period_work_income,
-                'monthly_payment': -monthly_payment,
+                'rent': -monthly_payment,
                 'net_income': person.period_share_income + person.period_work_income - monthly_payment
             })
             person.period_share_income = 0  # Reset the share income for this period
@@ -258,6 +258,7 @@ class Community:
                 'parent': None,
                 'share_income': 0,
                 'work_income': 0,
+                'rent':0,
                 'net_income': 0,
                 'inherited': True,
                 'current_house': None
@@ -271,6 +272,7 @@ class Community:
                 'parent': None,
                 'share_income': 0,
                 'work_income': 0,
+                'rent': 0,
                 'net_income': 0,
                 'inherited': False,
                 'current_house': None
