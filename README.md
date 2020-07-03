@@ -57,7 +57,7 @@ I'm exploring two options, with inheritance and without, to see how it goes. If 
 
 ![parameters](images/image_01.png)
 
-People live and die, and have childs. When there is a lack of houses, the founder buys more.
+People live, have childs and die. From time to time they change houses. When there is a lack of houses, the founder buys more.
 
 ### How shares evolve
 
@@ -77,4 +77,4 @@ to run the simulation:
 python application.py
 ```
 
-Jun, 2020, Cristian Vasquez
+July, 2020, Cristian Vasquez
