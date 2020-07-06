@@ -6,7 +6,6 @@ def new_random_house(setup, name=''):
     house_cost = np.random.normal(setup['average_house_cost'], setup['sigma_house_cost'])
     number_of_shares = setup['number_of_shares_per_house']
 
-    # share_price = house_price / number_of_shares
     house_to_rent_ratio = setup['house_to_rent_ratio']
     rent_price = house_cost * house_to_rent_ratio
     shares_per_month = setup['shares_per_month_earnings']

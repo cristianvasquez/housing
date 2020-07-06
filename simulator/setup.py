@@ -30,7 +30,7 @@ DEFAULT_SETUP = {
     'average_house_cost': MONTHS_PER_YEAR * 40 * 15,  # 7200
     'sigma_house_cost': 200,
     'number_of_shares_per_house': MONTHS_A_PERSON_LIVES / 2,
-    'house_to_rent_ratio': 2 / MONTHS_A_PERSON_LIVES,  # The rent divided by the house price
+    'house_to_rent_ratio': 2 / MONTHS_A_PERSON_LIVES, # rent_price = house_cost * house_to_rent_ratio
     'shares_per_month_earnings': 1,  # how many shares a person earns by renting for 1 month
 
     # People earnings
