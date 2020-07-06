@@ -176,7 +176,7 @@ Explore the parameters below.
         ]),
 
         html.Div([
-            html.Label('house to rent ratio'),
+            html.Label('HTRR (rent_price = house_cost * HTRR)'),
             dcc.Input(id='house_to_rent_ratio', value='{}'.format(DEFAULT_SETUP['house_to_rent_ratio']),
                       type='text'),
         ]),
