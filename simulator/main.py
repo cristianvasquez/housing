@@ -28,20 +28,18 @@ def run(
         # newborns initially have no house (homeless status)
         state.add_new_born()
 
-    total_price = 0
     for i in range(initial_number_of_houses):
         house, price = new_random_house(setup,f'initial house {state.house_max_id}')
         # houses are initially owned by the founder
         state.add_new_house(house)
-        total_price += price
 
         # The initial debt of the founder
-        founder.money = -total_price
-        founder.period_spent_building_houses = total_price
+        founder.money = -price
+        founder.period_spent_building_houses += price
 
     if verbose:
         print(
-            f'Simulation starts with {initial_number_of_houses} initial houses and {initial_number_of_people} people, total price:${total_price}, ruleset:{ruleset}')
+            f'Simulation starts with {initial_number_of_houses} initial houses and {initial_number_of_people} people, ruleset:{ruleset}')
 
     for i in range(setup['number_of_months_to_run']):
         state = run_for_one_month(state,setup,verbose)
