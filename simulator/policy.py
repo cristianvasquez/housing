@@ -8,7 +8,7 @@ def apply_custom_policy(state, setup, verbose=True):
     This corresponds to choices that people and founder can take
     '''
 
-    for current_house, tenant in state.house_tenants.items():
+    for current_house, tenant in state.house_tenants.copy().items():
         if (random.random() < setup['probability_of_changing_house']):
             # print(f'tenant {tenant} tries to find another house')
             prospect_house, price = state.random_available_house(state.people[tenant].money)
