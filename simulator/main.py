@@ -34,7 +34,7 @@ def run(
         state.add_new_house(house)
 
         # The initial debt of the founder
-        founder.money = -price
+        founder.money -= price
         founder.period_spent_building_houses += price
 
     if verbose:
