@@ -17,12 +17,13 @@ class Shareholder():
         self.name = name
         self.parent = parent
 
-        self.spent_building_houses = 0  # Only for stats
         self.shares_inherited = 0  # Only for stats
         self.money_inherited = 0  # Only for stats
         self.period_share_income = 0  # Only for stats
         self.period_work_income = 0  # Only for stats
         self.changed_house = 0  # Only for stats
+
+        self.period_spent_building_houses = 0  # Only for stats, founder
 
     @property
     def is_retired(self):

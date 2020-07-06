@@ -316,10 +316,11 @@ class Community:
 
         self.stats.add_general_stats_record({
             'year': year,
-            'amount': self.founder.spent_building_houses,
+            'amount': self.founder.period_spent_building_houses,
             'type': 'Spent building houses',
             'scale': 'money'
         })
+        self.founder.period_spent_building_houses = 0
 
     def record_example_house_stats(self, year):
         '''

@@ -36,13 +36,9 @@ def apply_custom_policy(state, setup, verbose=True):
     #  if there are few houses available, brother state tries to build new ones
     if len(state.available_houses) < setup['minimum_free_houses_policy']:
         house, price = new_random_house(setup, f'new house {state.house_max_id}')
-        if state.founder.money > price:
-            state.founder.money -= price
-            state.founder.spent_building_houses += price
-            state.add_new_house(house)
-            # print(f'{state.founder.name} money:${state.founder.money:.2f} built a house, price ${price:.2f}')
-        else:
-            if verbose:
-                print(f'{state.founder.name} money:${state.founder.money:.2f} cannot build a house, price ${price:.2f}')
+
+        state.founder.money -= price
+        state.founder.period_spent_building_houses += price
+        state.add_new_house(house)
 
     return state

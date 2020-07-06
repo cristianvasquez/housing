@@ -35,6 +35,10 @@ def run(
         state.add_new_house(house)
         total_price += price
 
+        # The initial debt of the founder
+        founder.money = -total_price
+        founder.period_spent_building_houses = total_price
+
     if verbose:
         print(
             f'Simulation starts with {initial_number_of_houses} initial houses and {initial_number_of_people} people, total price:${total_price}, ruleset:{ruleset}')

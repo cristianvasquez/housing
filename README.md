@@ -5,7 +5,7 @@ We need a house to live in. To do so, the most common options are:
 1. To rent a house
 2. To buy a house
 
-This simulation explores "Housing by shares," a hybrid mechanism that lives somewhere in between option 1 and 2
+This simulation explores "Housing by shares," a hybrid mechanism that lives somewhere in between option 1 and 2. This mechanism is meant to co-exist with 1 and 1.
 
 ## The problem
 
@@ -77,10 +77,14 @@ People has higher incomes at later ages, coming from the shares they gathered th
 
 ## App
 
-to run the simulation:
-
+Install the requirements
 ```
-python application.py
+pip install -r requirements.txt
+```
+
+to run the simulation:
+```
+python app.py
 ```
 
 July, 2020, Cristian Vasquez
